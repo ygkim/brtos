@@ -1,5 +1,6 @@
 #summary Brazilian Real-Time Operating System
 
+<BR>
 = 1. Introdução =
 
 Atualmente um grande número de microcontroladores, integrados em diversos equipamentos, exercem um papel importante no dia a dia das pessoas. Despertar ao som de um CD Player programável, tomar café da manhã preparado por um microondas digital, e ir ao trabalho de carro, cuja injeção de combustível é microcontrolada, são apenas alguns exemplos.
@@ -18,9 +19,7 @@ Projetos de sistemas embarcados de menor complexidade ainda utilizam a linguagem
 
 O BRTOS foi desenvolvido com o intuito de ser um sistema operacional simples, com o mínimo de consumo de memória de dados e programa. Isto deve-se ao reduzido poder computacional e memória disponíveis nos microcontroladores de baixo custo de 8, 16 e 32 bits disponíveis no mercado. Quanto maior a quantidade de memória e periféricos de um microcontrolador, maior o seu custo. Através desta ferramenta será possível desenvolver aplicações mais organizadas e estruturadas, gerenciando o ambiente de tarefas concorrentes, inerente a sistemas embarcados, de forma eficiente.
 
-
-
-
+<BR>
 = 2. Como configurar e utilizar o BRTOS =
 
 
