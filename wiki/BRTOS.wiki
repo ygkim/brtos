@@ -57,4 +57,5 @@ O arquivo BRTOS.h apresentará a seguinte estrutura:
 
 // Others Defines
 #define configMAX_TASK_NAME_LEN 16
-#define configMAX_TASK_INSTALL 32}}}
+#define configMAX_TASK_INSTALL 32
+}}}
