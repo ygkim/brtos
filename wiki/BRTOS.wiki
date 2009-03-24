@@ -66,7 +66,7 @@ O arquivo BRTOS.h apresentará a seguinte estrutura:
 
   * *SP`_`SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Para _Stack Pointer_ menor ou igual a 16 bits, utilize *SP`_`SIZE = 16*. Para _Stack Pointer_ menor ou igual a 32 bits, utilize *SP`_`SIZE = 32*.
 
-  * NUMBER`_`OF`_`TASKS indica quantas tarefas podem ser instaladas em uma aplicação. O valor máximo para este _define_ é 31. Esta definição permite que uma menor quantidade de memória seja alocada para estrutura de contexto de tarefas. Utilize este recurso para reduzir o consumo de memória do sistema quando um número pequeno de tarefas for instalado.
+  * *NUMBER`_`OF`_`TASKS* indica quantas tarefas podem ser instaladas em uma aplicação. O valor máximo para este _define_ é 31. Esta definição permite que uma menor quantidade de memória seja alocada para estrutura de contexto de tarefas. Utilize este recurso para reduzir o consumo de memória do sistema quando um número pequeno de tarefas for instalado.
 
   * *configCPU`_`CLOCK`_`HZ* indica a freqüência de barramento utilizada pelo microcontrolador em hertz.
 
