@@ -128,11 +128,29 @@ No arquivo *event.h* o desenvolvedor determinará quais serviços / eventos esta
 == 2.2 Iniciando uma aplicação ==
 
 A seqüência de inicialização do sistema deve seguir uma ordem bem determinada. Os seguintes passos devem ser realizados:
+  # Inicialização dos registradores principais do microcontrolador
+  # Inicialização dos serviços / eventos (caso sejam utilizados)
+  # Inicialização do hardware interno do microcontrolador
+  # Inicialização do hardware externo ao microcontrolador
+  # Inicialização das tarefas
+  # Inicialização do escalonador
 
 A seguir é apresentado um exemplo de inicialização de uma aplicação utilizando o microcontrolador Freescale Coldfire V1:
 
 {{{
-  
+
+// Declara ponteiros para os blocos de controle dos serviços / eventos do BRTOS
+
+// Declara ponteiro p/ serviço de filas
+BRTOS_Queue  *Serial;
+// Declara ponteiro p/ serviço de semáforo
+BRTOS_Sem    *Teclado;
+
+// Declara ponteiro p/ serviço de caixa de mensagem
+BRTOS_Mbox   *ConversorAD;
+
+
+void main(void) {  
   ////////////////////////////////////////////////////////////
   /////      Inicialização dos registradores principais  /////
   /////      do microcontrolador utilizado               /////
@@ -141,7 +159,7 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
                                   
 
   ////////////////////////////////////////////////////////////
-  /////      Inicialização dos Eventos                   /////
+  /////      Inicialização dos Serviços / Eventos        /////
   ////////////////////////////////////////////////////////////
 
   // Se algum serviço do sistema for utilizado, está função deve ser chamada
