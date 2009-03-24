@@ -74,7 +74,7 @@ O arquivo BRTOS.h apresentará a seguinte estrutura:
 
   * *configTIMER`_`PRE`_`SCALER* pode ser utilizado no _port_ do sistema para a configuração do hardware responsável pelo _Timer Tick_.
 
-  * *TickCountOverFlow* determina o número máximo de marcas de tempo do sistema que podem ser utilizadas pelo gerenciador de tempo. Imagine o caso onde se utiliza um _Timer Tick_ de 1ms. Para gerar um _delay_ maior do que 32000ms pode ser necessário utilizar duas chamadas da função DelayTask ou utilizar a função DelayTaskHMSM que opera em milisegundos, segundos, minutos e horas.
+  * *TickCountOverFlow* determina o número máximo de marcas de tempo do sistema que podem ser utilizadas pelo gerenciador de tempo. Imagine o caso onde se utiliza um _Timer Tick_ de 1ms. Para gerar um _delay_ maior do que 32000ms pode ser necessário utilizar duas chamadas da função *DelayTask* ou utilizar a função *DelayTaskHMSM* que opera em milisegundos, segundos, minutos e horas.
 
   * *HEAP`_`SIZE* determina a quantidade de memória alocada como pilha virtual das tarefas. Sempre que uma tarefa é instalada, a quantidade de memória utilizada pela tarefa será alocada no _HEAP_.
 
