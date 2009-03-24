@@ -132,18 +132,24 @@ A seqüência de inicialização do sistema deve seguir uma ordem bem determinad
 A seguir é apresentado um exemplo de inicialização de uma aplicação utilizando o microcontrolador Freescale Coldfire V1:
 
 {{{
-  MCU_init(); /* call Device Initialization */
-
-  /* include your code here */
-
   
   ////////////////////////////////////////////////////////////
-  /////      Initialize Events                           /////
+  /////      Inicialização dos registradores principais  /////
+  /////      do microcontrolador utilizado               /////
   ////////////////////////////////////////////////////////////
-  
+  MCU_init();
+                                  
+
+  ////////////////////////////////////////////////////////////
+  /////      Inicialização dos Eventos                   /////
+  ////////////////////////////////////////////////////////////
+
+  // Se algum serviço do sistema for utilizado, está função deve ser chamada
   // Declara o tabela de blocos de controle de Eventos
   initEvents();
   
+
+  // Exemplo de criação de uma fila
   // Cria um gerenciador de eventos p/ a porta serial
   // onde os dados gerenciados por este evento
   // estão em buffer circular, chamado de SerialPortBuffer
@@ -155,7 +161,10 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
     while(1){};
   };
   
-  
+
+  // Exemplo de criação de um semáforo
+  // No caso, o semáforo é utilizado para sincronizar a interrupção de teclado
+  // com uma tarefa
   if (OSSemCreate(0,&Teclado) != ALLOC_EVENT_OK)
   {
     // Oh Oh
@@ -164,6 +173,9 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
   };
      
   
+  // Exemplo de criação de uma caixa de mensagem
+  // No caso será utilizado para acordar uma tarefa que está
+  // a espera de um novo valor do conversor A/D
   if (OSMboxCreate(&ConversorAD,(INT16U *)0) != ALLOC_EVENT_OK)
   {
     // Oh Oh
@@ -172,14 +184,12 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
   };
   
   
-  ////////////////////////////////////////////////////////////
-      
 
   ////////////////////////////////////////////////////////////
-  /////      Initialize Hardware                         /////
+  /////      Inicialização do Hardware                   /////
   ////////////////////////////////////////////////////////////
   
-  // Initialize Tick Timer
+  // Inicializa o Tick Timer
   TickTimerSetup();
   
   // Initialize Ports
