@@ -21,6 +21,9 @@ O BRTOS foi desenvolvido com o intuito de ser um sistema operacional simples, co
 
 = 2. Como configurar e utilizar o BRTOS =
 
+
+== 2.1 Configuração do BRTOS ==
+
 Antes de iniciar o desenvolvimento da aplicação é preciso configurar alguns parâmetros do sistema. Estas configurações devem ser realizadas nos arquivos *BRTOS.h* e *event.h*.
 
   * O arquivo BRTOS.h possui definições relativas a memória, clock e o microcontrolador utilizado;
@@ -113,3 +116,14 @@ No arquivo *event.h* o desenvolvedor determinará quais serviços / eventos esta
 // Define o número máximo de tarefas que podem ser acordadas pelo evento
 #define WAIT_LIST_SIZE  4
 }}}
+
+  * Os _defines_ *BRTOS`_`SEM`_`EN*, *BRTOS`_`MUTEX`_`EN*, *BRTOS`_`MBOX`_`EN* e *BRTOS`_`QUEUE`_`EN* determinam se os serviços de semáforo, mutex, mailbox e filas, respectivamente, estarão ou não disponíveis para a aplicação. O valor 1 determina que o serviço estará disponível.
+
+  * Os _defines_ *BRTOS`_`MAX`_`SEM*, *BRTOS`_`MAX`_`MUTEX*, *BRTOS`_`MAX`_`MBOX* e *BRTOS`_`MAX`_`QUEUE* determinam a quantidade máxima de instâncias que poderão ser criadas para os serviços de semáforo, mutex, mailbox e fila, respectivamente.
+
+  * *WAIT`_`LIST`_`SIZE* determina a quantidade máxima de tarefas que pode ser suspensa por um determinado serviço. Imagine um caso onde várias tarefas compartilham um recurso (exemplo: display LCD). Quando uma tarefa adquire o direito de utilizar o recurso, as outras tarefas que o solicitarem serão suspensas, até que o recurso seja liberado. O recurso que gerencia recursos compartilhados é o *mutex*. O número máximo de tarefas que poderão ser suspensas por um mutex, por exemplo, é determinado pelo _define_ *WAIT`_`LIST`_`SIZE*.
+
+
+== 2.2 Iniciando uma aplicação ==
+
+Uma série de funções deve ser executada na inicialização do sistema. Entre elas estão:
