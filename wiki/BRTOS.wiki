@@ -320,3 +320,25 @@ void main(void) {
 As tarefas da aplicação devem ser criadas no arquivo *tasks.c*. A seguir é apresentada a estrutura de uma tarefa:
 
 {{{
+
+//  Tarefa para gerenciamento de um RTC da aplicação
+
+static void Task_RTC(void)
+{
+  // Configuração da tarefa
+  // Este código será executado somente na inicialização do sistema
+  OSResetTime(&Hora);
+
+
+  // Loop principal da tarefa
+  // Uma tarefa opera como um aplicativo independente,
+  // utilizando o conceito de super laço ou laço infinito
+  for (;;) 
+  {
+      // Código da tarefa
+      OSUpdateUptime(&Hora,&Data);
+      PTHD_PTHD0 = ~PTHD_PTHD0;
+      DelayTask(1000);
+  }
+}
+}}}
