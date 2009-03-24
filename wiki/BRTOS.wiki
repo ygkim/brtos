@@ -64,4 +64,4 @@ O arquivo BRTOS.h apresentará a seguinte estrutura:
 
   * O _define_ *COP (Computer Operating Properly)* indica se o _watchdog_ do sistema estará ativo. *COP = 1* indica _watchdog_ ativo.
 
-  * O _define *SP_SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Para _Stack Pointer_ menor ou igual a 16 bits, utilize *SP_`*`SIZE = 16*. Para _Stack Pointer_ menor ou igual a 32 bits, utilize *SP_SIZE = 32*.
+  * O _define *SP_SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Para _Stack Pointer_ menor ou igual a 16 bits, utilize *SP`_`SIZE = 16*. Para _Stack Pointer_ menor ou igual a 32 bits, utilize *SP_SIZE = 32*.
