@@ -316,3 +316,7 @@ void main(void) {
   };
 }
 }}}
+
+As tarefas da aplicação devem ser criadas no arquivo *tasks.c*. A seguir é apresentada a estrutura de uma tarefa:
+
+{{{
