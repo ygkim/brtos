@@ -1,0 +1,4 @@
+#labels RTOS,Real-Time
+2.  Motivação
+
+O foco inicial do BRTOS foi ser a camada básica de software para aplicações profundamente embarcadas, baseadas em microcontroladores de 8, 16 e 32 bit, com restrições de memória. A meta era projetar um kernel em tempo-real, que provesse ferramentas para lidar com a concorrência natural do ambiente externo. O nicho de aplicações se restringe a sistemas de controle e monitoramento, que precisam executar várias tarefas simultaneamente, como: rede de sensores sem-fio, sistemas de controle para indústria, segurança residencial e appliances em geral.
