@@ -192,67 +192,47 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
   // Inicializa o Tick Timer
   TickTimerSetup();
   
-  // Initialize Ports
+  // Inicializa as portas utilizadas na aplicação
   PortSetup();
   
-  // Initialize Keyboard
+  // Inicializa uma porta como teclado
   Keyb2Setup(0x0F);
   
-  // Initialize A/D Converter
+  // Configura / Inicializa um conversor A/D
   ADSetup(HighSpeed, ShortSampleTime, 12);
 
+
+  // Configura / Inicializa uma saída PWM
   // PWM = Frequency 10Khz
   // Center Align
   // Channell 0 = Duty 40%
   // Polarity = Positive
   // Channell 1 = Duty 40%
   // Polarity = Negative
-  //PWM3Setup(10000,CenterAlign,1,40,NegativeDutyCyclePolarity,1,40,PositiveDutyCyclePolarity);
+  PWM3Setup(10000,CenterAlign,1,40,NegativeDutyCyclePolarity);
 
-  // Inicia a porta serial a 19200 bauds
+  // Configura / Inicia uma porta serial a 19200 bauds
   // Prioridade máxima a utilizar o recurso = 3
+  // O protocolo utilizado no mutex do RTOS associado a este recurso
+  // utiliza como parâmetro a maior prioridade das tarefas que irão utilizar
+  // o recurso para evitar inversões de prioridade e deadlocks.
   init_SCI2(3);
   
-  //////////////////////////////////////////////////////////
-  // Utilizado no DEBUG para verificar motivo do Reset   ///
-  //////////////////////////////////////////////////////////
-  SerialReset();
-  //////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////  
-  
 
-  // Initialize Display LCD
+  ////////////////////////////////////////////////////////////
+  /////      Inicialização do Hardware Externo           /////
+  ////////////////////////////////////////////////////////////
+
+  // Inicializa um Display LCD 16x2
   init_lcd();
   // Prioridade máxima a utilizar o recurso = 5
   init_lcd_resource(5);
   
   
-  ////////////////////////////////////////////////
-  //     Initialize IEEE 802.15.4 radio     //////
-  ////////////////////////////////////////////////
-  
-  // Initialize SPI 1 Port
-  init_SPI1();
-  
-  // Initialize interrupt and I/O radio port
-  init_radio_port();
-  
-  // Initialize radio variables
-  radio_init();
-  
-  // Inilitalize radio registers
-  #if (DEBUG == 1)
-  MRF24J40Init();
-  #endif
  
-  /////////////////////////////////////////////////
-  
-  ////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////  
-  
- 
-  // Initialize global variables
+  // Função que inicializa as variáveis globais responsáveis
+  // pelo gerenciamento de tarefas
+  // Deve ser executada antes da instalação de qualquer tarefa
   PreInstallTasks();
   
   // Instala todas as tafefas no seguinte formato:
