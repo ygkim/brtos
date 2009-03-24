@@ -229,18 +229,20 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
   init_lcd_resource(5);
   
   
- 
+  ////////////////////////////////////////////////////////////
+  /////      Inicialização das tarefas                   /////
+  //////////////////////////////////////////////////////////// 
+
   // Função que inicializa as variáveis globais responsáveis
   // pelo gerenciamento de tarefas
   // Deve ser executada antes da instalação de qualquer tarefa
   PreInstallTasks();
   
+
   // Instala todas as tafefas no seguinte formato:
   // (Endereço da tarefa, Nome da tarefa, Número de Bytes do Stack Virtual,
   //  Prioridade da Tarefa)
-  
-  // OBS: The number of installed tasks must be supplied in myRTOS.c
-  
+
   // Cada tarefa deve possuir uma prioridade
   // A instalação de uma tarefa em um prioridade ocupada gerará um código de exceção
   
@@ -272,14 +274,6 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
     while(1){};
   };
   
-  /*
-  if(InstallTask(&Task_5,"RF Module Mon",100,5) != OK)
-  {
-    // Oh Oh
-    // Não deveria entrar aqui !!!
-    while(1){};
-  };
-  */  
   
   if(InstallTask(&Task_6,"RF Event Handler",400,2) != OK)
   {
@@ -288,11 +282,12 @@ A seguir é apresentado um exemplo de inicialização de uma aplicação utiliza
      while(1){};
   };    
         
-  // Exemplo:
-  // Como acessar o ponteiro de dados do evento:
-  // No caso de uma fila, declara-se um ponteiro do tipo queue
-  // p/ acessar os dados, iguala-se este ponteiro a OSEvent->OSEventPtr
-  //Teste = Serial->OSEventPtr;
+
+  ////////////////////////////////////////////////////////////
+  /////    Inicialização do escalonador                  /////
+  /////    A partir deste momento as tarefas instaladas  /////
+  /////    começam a ser executadas                      /////
+  //////////////////////////////////////////////////////////// 
 
   // Start Task Scheduler
   if(TaskStartScheduler() != OK)
