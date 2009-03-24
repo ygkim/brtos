@@ -1,4 +1,4 @@
-#summary BRTOS - Brazilian Real-Time Operating System
+#summary Brazilian Real-Time Operating System
 
 = 1. Introdução =
 
@@ -18,6 +18,9 @@ Projetos de sistemas embarcados de menor complexidade ainda utilizam a linguagem
 
 O BRTOS foi desenvolvido com o intuito de ser um sistema operacional simples, com o mínimo de consumo de memória de dados e programa. Isto deve-se ao reduzido poder computacional e memória disponíveis nos microcontroladores de baixo custo de 8, 16 e 32 bits disponíveis no mercado. Quanto maior a quantidade de memória e periféricos de um microcontrolador, maior o seu custo. Através desta ferramenta será possível desenvolver aplicações mais organizadas e estruturadas, gerenciando o ambiente de tarefas concorrentes, inerente a sistemas embarcados, de forma eficiente.
 
+
 = 2. Como configurar e utilizar o BRTOS =
 
-Antes de iniciar o desenvolvimento da aplicação é preciso configurar alguns parâmetros do sistema.
+Antes de iniciar o desenvolvimento da aplicação é preciso configurar alguns parâmetros do sistema. Estas configurações devem ser realizadas nos arquivos BRTOS.h e event.h.
+O arquivo BRTOS.h possui definições relativas a memória e o microcontrolador utilizado
+Já o arquivo event.h define quais eventos / serviços do sistema serão utilizados (semáforos, mutex, mailbox e filas de mensagem).
