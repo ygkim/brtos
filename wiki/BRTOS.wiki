@@ -59,3 +59,9 @@ O arquivo BRTOS.h apresentará a seguinte estrutura:
 #define configMAX_TASK_NAME_LEN 16
 #define configMAX_TASK_INSTALL 32
 }}}
+
+  * O _define_ *DEBUG* é utilizado em algumas plataformas que possuem diferenciações entre o simulador e o debugger. Desta forma o código se adapta a condição desejada. *DEBUG = 1* indica modo debugger / flash write.
+
+  * O _define_ *COP (Computer Operating Properly)* indica se o _watchdog_ do sistema estará ativo. *COP = 1* indica _watchdog_ ativo.
+
+  * O _define *SP_SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Para _Stack Pointer_ menor ou igual a 16 bits, utilize *SP_SIZE = 16*. Para _Stack Pointer_ menor ou igual a 32 bits, utilize *SP_SIZE = 32*.
