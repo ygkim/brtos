@@ -1,4 +1,4 @@
-#labels Introdução,Comoutilizarosistema
+#labels Introdução
 1. Introdução
 
 Atualmente um grande número de microcontroladores, integrados em diversos equipamentos, exercem um papel importante no dia a dia das pessoas. Despertar ao som de um CD Player programável, tomar café da manhã preparado por um microondas digital, e ir ao trabalho de carro, cuja injeção de combustível é microcontrolada, são apenas alguns exemplos.
