@@ -23,8 +23,5 @@ O BRTOS foi desenvolvido com o intuito de ser um sistema operacional simples, co
 
 Antes de iniciar o desenvolvimento da aplicação é preciso configurar alguns parâmetros do sistema. Estas configurações devem ser realizadas nos arquivos *BRTOS.h* e *event.h*.
 
-
-*  O arquivo BRTOS.h possui definições relativas a memória e o microcontrolador utilizado;
-
-
-*  Já o arquivo event.h define quais eventos / serviços do sistema serão utilizados (semáforos, mutex, mailbox e filas de mensagem).
+  * O arquivo BRTOS.h possui definições relativas a memória e o microcontrolador utilizado;
+  * Já o arquivo event.h define quais eventos / serviços do sistema serão utilizados (semáforos, mutex, mailbox e filas de mensagem).
