@@ -342,3 +342,11 @@ static void Task_RTC(void)
   }
 }
 }}}
+
+
+== 2.3 Como determinar a prioridade associada a cada tarefa ==
+
+Algumas regras podem ser seguidas para determinar prioridades de tarefas em um sistema operacional preemptivo baseado em prioridades. Algumas delas são:
+  # Tarefas que gerenciam dispositivos de I/O devem possuir alta prioridade. Um dos motivos é que estas tarefas devem receber / tratar os dados mais rápido do que a fonte dos dados está enviando novos dados. Em um sistema operacional de grande porte, como Linux e windows, pode-se notar que quanto maior o acesso a dispositivos de I/O (_hard disk_, por exemplo), mais o operador sente a redução de performance para outras tarefas. Isto deve-se aos serviços do sistema que gerenciam I/Os serem de alta prioridade.
+  # Alguns algoritmos sugerem que tarefas que são realizadas de forma rápida devem possuir maior prioridade, enquanto que tarefas mais lentas recebem menores prioridades. Desta forma uma tarefa lenta pode ser interrompida diversas vezes durante sua operação por tarefas de maior prioridade. O principal algoritmo desta linha de pensamento é o Rate Monotonic (RM).
+  # Tarefas que não interferem diretamente na operação do sistema embarcado, como atualizar um display, por exemplo, podem ter prioridades baixas.
