@@ -342,7 +342,7 @@ static void Task_RTC(void)
   }
 }
 }}}
-
+<BR>
 
 == 2.3 Como determinar a prioridade associada a cada tarefa ==
 
