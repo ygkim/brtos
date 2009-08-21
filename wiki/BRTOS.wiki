@@ -124,6 +124,7 @@ No arquivo *event.h* o desenvolvedor determinará quais serviços / eventos esta
 
   * *WAIT`_`LIST`_`SIZE* determina a quantidade máxima de tarefas que pode ser suspensa por um determinado serviço. Imagine um caso onde várias tarefas compartilham um recurso (exemplo: display LCD). Quando uma tarefa adquire o direito de utilizar o recurso, as outras tarefas que o solicitarem serão suspensas, até que o recurso seja liberado. O recurso que gerencia recursos compartilhados é o *mutex*. O número máximo de tarefas que poderão ser suspensas por um mutex, por exemplo, é determinado pelo _define_ *WAIT`_`LIST`_`SIZE*.
 
+* OBS: Atualmente a estrutura de filas (queue) do port para HCS08 não está funcional. O demo RC3 deste port apresenta um exemplo de como simular a estrutura de fila com variáveis. *
 
 == 2.2 Iniciando uma aplicação ==
 
