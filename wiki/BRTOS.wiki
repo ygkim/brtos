@@ -19,11 +19,22 @@ Projetos de sistemas embarcados de menor complexidade ainda utilizam a linguagem
 
 O BRTOS foi desenvolvido com o intuito de ser um sistema operacional simples, com o mínimo de consumo de memória de dados e programa. Isto deve-se ao reduzido poder computacional e memória disponíveis nos microcontroladores de baixo custo de 8, 16 e 32 bits disponíveis no mercado. Quanto maior a quantidade de memória e periféricos de um microcontrolador, maior o seu custo. Através desta ferramenta será possível desenvolver aplicações mais organizadas e estruturadas, gerenciando o ambiente de tarefas concorrentes, inerente a sistemas embarcados, de forma eficiente.
 
+== 1.1 Teste de Desempenho do BRTOS ==
+
+O tempo de troca de contexto depende do clock e do microcontrolador utilizado.
+Resultados obtidos até o momento:
+
+Coldfire V1 - Troca de contexto em 10us com clock de barramento = 24Mhz.<BR>
+HCS08       - Troca de contexto em 30us com clock de barramento = 20Mhz.
+
+
 <BR>
 = 2. Como configurar e utilizar o BRTOS =
 
 
 == 2.1 Configuração do BRTOS ==
+
+A quantidade de RAM necessária para as tarefas dependerá da CPU escolhida (CPUs RISC necessitam maior espaço em RAM, pois possuem maior número de registradores), do número de interrupções habilitadas e das necessidades da tarefa (variáveis e chamadas de funções).
 
 Antes de iniciar o desenvolvimento da aplicação é preciso configurar alguns parâmetros do sistema. Estas configurações devem ser realizadas nos arquivos *BRTOS.h* e *event.h*.
 
