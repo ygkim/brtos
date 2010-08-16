@@ -1,5 +1,9 @@
-Coldfire_V1_Port_issues
+#summary Specific Port issues to Coldfire V1 MCUs
 
+<BR>
+= Coldfire V1 Port issues =
+
+<BR>
 * Para compilar o BRTOS no CodeWarrior versão 6.3 deve-se modificar a região ".custom" do arquivo "Project.lcf", ficando assim:*
 
 {{{
@@ -19,7 +23,7 @@ Coldfire_V1_Port_issues
 
 }}}
 
-
+<BR>
 * Para o port do Coldfire V1 sem suporte a "aninhamento de interrupções" é necessário configurar o registrador CPUCR da seguinte forma:*
 {{{
   asm {
@@ -32,4 +36,4 @@ Coldfire_V1_Port_issues
   }
 }}}
 <BR>
-* Ainda, este microcontrolador apresenta um problema no módulo "Flash speculation" quando desabilitando o aninhamento de interrupções. Assim, recomenda-se que este módulo seja desabilitado.*
+* Ainda, este microcontrolador apresenta um problema no módulo "Flash speculation" quando desabilitando o aninhamento de interrupções. Assim, recomenda-se que este módulo seja desabilitado neste modo de operação.*
