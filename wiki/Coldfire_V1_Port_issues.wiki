@@ -1,4 +1,4 @@
-#summary Specific Port issues to Coldfire V1 MCUs
+#summary Specific Port issues for Coldfire V1 MCUs
 
 <BR>
 * Para compilar o BRTOS no CodeWarrior versão 6.3 deve-se modificar a região ".custom" do arquivo "Project.lcf", ficando assim:*
