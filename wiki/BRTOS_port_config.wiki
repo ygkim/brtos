@@ -201,7 +201,9 @@ inline asm __declspec(register_abi) void RestoreContext(void)
 
 *OBS: O único contexto a ser salvo no HCS08 é o registrador H. Como o compilador utilizado inclui automaticamente o código para salvar este registrador nas interrupções, o port não precisa implementar o salvamento de contexto.*
 
+<BR>
 *Outras definições do hardware:*
+
 Ex: Coldfire V1
 {{{
 /// Defines the change context command of the choosen processor
