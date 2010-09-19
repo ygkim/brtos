@@ -280,3 +280,79 @@ void TickTimerSetup(void)
 }}}
 
 A função _TickTimerSetup_ deve ser utilizada para implementar a rotina de configuração do Tick Timer do sistema. Valores típicos entre 1ms e 10ms.
+
+
+As funções InstallTask e InstallIdle são praticamente independentes do microcontrolador. O que faz com que estejam incluídas no HAL é a preparação do stack para o boot inicial da tarefa.
+
+O protótipo destas função é apresentado abaixo:
+{{{
+INT8U InstallTask(void(*FctPtr)(void),const char *TaskName, INT16U USER_STACKED_BYTES,INT8U iPriority)
+}}}
+
+<BR>
+{{{
+INT8U InstallIdle(void(*FctPtr)(void), INT16U USER_STACKED_BYTES)
+}}}
+{{{
+
+
+Para exemplificar a diferença de um port destas funções será apresentado o trecho de instalação que precisa ser portado para o HCS08 e para o Coldfire V1.
+
+*HCS08:*
+{{{
+   // Pointer to Task Entry
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 1] = ((unsigned long) (FctPtr)) & 0x00FF;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 2] = ((unsigned long) (FctPtr)) >> 8;   
+}}}
+
+<BR>
+
+*Coldfire V1:*
+{{{
+   // First 4 bytes defined to Coldfire Only
+   // Format: First 4 bits = processor indicating a two-longword frame, always 0x04 in MCF51QE
+   //         Other 4 bits = fault status field, always 0x00 if no error occurred
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 8] = 0x40;
+   // Vector
+   // The 8-bit vector number, vector[7:0], defines the exception type and is
+   // calculated by the processor for all internal faults and represents the
+   // value supplied by the interrupt controller in the case of an interrupt
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 7] = 0x80;
+   
+   // Initial SR Register
+   // Interrupts Enabled
+   // CCR = 0x00
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 6] = 0x20;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 5] = 0x00;
+   
+   // Pointer to Task Entry
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 1] = ((unsigned long) (FctPtr)) & 0x00FF;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 2] = ((unsigned long) (FctPtr)) >> 8;   
+   
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 13] = 0xA1;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 17] = 0xA0;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 21] = 0xD2;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 25] = 0xD1;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 29] = 0xD0;
+   
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 33] = 0xA6;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 37] = 0xA5;   
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 41] = 0xA4;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 45] = 0xA3;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 49] = 0xA2;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 53] = 0xD7;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 57] = 0xD6;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 61] = 0xD5;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 65] = 0xD4;
+   STACK[iStackAddress + NUMBER_OF_STACKED_BYTES - 69] = 0xD3;   
+}}}
+
+<BR>
+Note que o microcontrolador HCS08 utiliza uma arquitetura CISC com poucos registradores. Como a estrutura HEAP é inicializada com zeros, não é necessário inicializar o contexto dos registrador A e X com zero, somente definir o ponteiro para a entrada da tarefa.
+
+Já o Coldfire V1, possui muitos 7 registradores de endereço e 7 registradores de dados. Ainda, é necessário definir a condição inicial do registrador de condição e do vetor de controle do sistema.
+
+<BR>
+Era isso pessoal ... As informações necessárias para configurar e portar o BRTOS estão neste documento. Estamos a disposição para qualquer dúvida.
+
+*OBS: O port do sistema com suporte a interrupções aninhadas exige um pouco mais de esforço. Em um próximo post iremos abordar as modificações necessárias.*
