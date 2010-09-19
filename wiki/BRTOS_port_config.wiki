@@ -97,40 +97,20 @@ O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a mem
 
 O arquivo *HAL.h* contêm as definições da camada de abstração de hardware do sistema e a definição do microcontrolador utilizado.
 
+*Definição do microcontrolador:*
 {{{
-
 // Define if Coldfire
 #define Coldfire 1              ///< Enables or disables the coldfire core as the default processor
 #define HCS08 0                 ///< Enables or disables the HCS08 core as the default processor
+}}}
 
-
-
+*Salvar e restaurar contexto. Salvar stack pointer.*
+{{{
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 /////      Port Defines                                /////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
-/// Defines the change context command of the choosen processor
-#define ChangeContext(void) asm ("TRAP %14");
-/// Defines the disable interrupts command of the choosen microcontroller
-#define OSEnterCritical DisableInterrupts;
-/// Defines the enable interrupts command of the choosen microcontroller
-#define OSExitCritical EnableInterrupts;
-/// Defines the low power command of the choosen microcontroller
-#define OS_Wait asm(STOP #0x2000);
-/// Defines the tick timer interrupt handler code (clear flag) of the choosen microcontroller
-#define TICKTIMER_INT_HANDLER TPM1SC_TOF = 0
-#define TIMER_MODULE TPM1MOD
-
-
-// stacked by the RTI interrupt process
-// Mínimo de 60 devido ao salvamento de 15 registradores de 32 bits da CPU
-// D0-D7 (32 bytes) + A0-A6 (28 bytes) + Format (1 byte) + Vector (1 byte) + SR (2 bytes) + SP (4 bytes)
-/// Minimum size of a task stack.
-/// Example in the coldfire processor: D0-D7 (32 bytes) + A0-A6 (28 bytes) + Format (1 byte) + Vector (1 byte) + SR (2 bytes) + SP (4 bytes) = 68 bytes
-#define NUMBER_MIN_OF_STACKED_BYTES 68
-
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -145,7 +125,7 @@ O arquivo *HAL.h* contêm as definições da camada de abstração de hardware d
 *********************************************************************************************/
 inline asm __declspec(register_abi) void SaveContext(void) 
 {  
-	LEA		   -40(A7),A7				    // reserve space on current stack
+	LEA	 -40(A7),A7				// reserve space on current stack
 	MOVEM.L  D3-D7/A2-A6,(A7)			// save CPU registers
 }
 
@@ -198,8 +178,8 @@ inline asm __declspec(register_abi) void SaveCurrentSP(void)
 inline asm __declspec(register_abi) void RestoreContext(void)
 {  
 	MOVE    SPvalue,A7              // restore top of stack
-	MOVEM.L (A7),D3-D7/A2-A6  			// restore other CPU registers
-	LEA		  40(A7),A7			     	    // adjust stack pointer value
+	MOVEM.L (A7),D3-D7/A2-A6  	// restore other CPU registers
+	LEA     40(A7),A7		// adjust stack pointer value
 }
 
 /// Restore Context Define
@@ -209,3 +189,28 @@ inline asm __declspec(register_abi) void RestoreContext(void)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 }}}
+
+*Outras definições do hardware:*
+
+{{{
+/// Defines the change context command of the choosen processor
+#define ChangeContext(void) asm ("TRAP %14");
+/// Defines the disable interrupts command of the choosen microcontroller
+#define OSEnterCritical DisableInterrupts;
+/// Defines the enable interrupts command of the choosen microcontroller
+#define OSExitCritical EnableInterrupts;
+/// Defines the low power command of the choosen microcontroller
+#define OS_Wait asm(STOP #0x2000);
+/// Defines the tick timer interrupt handler code (clear flag) of the choosen microcontroller
+#define TICKTIMER_INT_HANDLER TPM1SC_TOF = 0
+#define TIMER_MODULE TPM1MOD
+
+
+// stacked by the RTI interrupt process
+// Mínimo de 60 devido ao salvamento de 15 registradores de 32 bits da CPU
+// D0-D7 (32 bytes) + A0-A6 (28 bytes) + Format (1 byte) + Vector (1 byte) + SR (2 bytes) + SP (4 bytes)
+/// Minimum size of a task stack.
+/// Example in the coldfire processor: D0-D7 (32 bytes) + A0-A6 (28 bytes) + Format (1 byte) + Vector (1 byte) + SR (2 bytes) + SP (4 bytes) = 68 bytes
+#define NUMBER_MIN_OF_STACKED_BYTES 68
+}}}
+
