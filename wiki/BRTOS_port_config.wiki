@@ -10,7 +10,7 @@ As dicas / configurações serão organizadas pelos arquivos do BRTOS.
 
 == 1.1 hardware.h ==
 
-O arquivo hardware.h contém os includes de arquivos da arquitetura / MCU utilizado. Estes includes normalmente informam o endereço dos registradores do MCU, os códigos para habilitar / desabilitar interrupções, modos de baixo consumo, entre outros.
+O arquivo *hardware.h* contêm os includes de arquivos da arquitetura / MCU utilizado. Estes includes normalmente informam o endereço dos registradores do MCU, os códigos para habilitar / desabilitar interrupções, modos de baixo consumo, entre outros.
 
 Exemplo de hardware.h do Coldfire V1 e HCS08:
 {{{
@@ -18,19 +18,20 @@ Exemplo de hardware.h do Coldfire V1 e HCS08:
 #include "derivative.h"          /* include peripheral declarations */
 }}}
 
-Antes de iniciar o desenvolvimento da aplicação é preciso configurar alguns parâmetros do sistema. Estas configurações devem ser realizadas nos arquivos *BRTOS.h* e *event.h*.
 
-  * O arquivo BRTOS.h possui definições relativas a memória, clock e o microcontrolador utilizado;
-  * Já o arquivo event.h define quais eventos / serviços do sistema serão utilizados (semáforos, mutex, mailbox e filas de mensagem).
+== 1.1 BRTOS.h ==
 
-O arquivo *BRTOS.h* apresentará a seguinte estrutura:
+O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a memória, clock e muitas outras configurações. Este arquivo apresentará a seguinte estrutura:
 
 {{{
 // Define if simulation or DEBUG
 #define DEBUG 1
 
 // Define if whatchdog active
-#define COP 1
+#define WATCHDOG 1
+
+/// Define Number of Priorities
+#define NUMBER_OF_PRIORITIES 32
 
 // Define CPU Stack Pointer Size
 #define SP_SIZE 32
@@ -39,17 +40,22 @@ O arquivo *BRTOS.h* apresentará a seguinte estrutura:
 // must always be equal or higher to NumberOfInstalledTasks
 #define NUMBER_OF_TASKS 6
 
-
-// TickTimer Defines
-#define configCPU_CLOCK_HZ          (INT32U)24008000
-#define configTICK_RATE_HZ          (INT32U)1000
-#define configTIMER_PRE_SCALER      0
-#define TickCountOverFlow           (INT16U)32000
+/// Define if TimerHook function is active
+#define TIMER_HOOK_EN 1
 
 
-//Stack Defines
-// P/ Coldfire com 8KB de RAM, limite de 5KB p/ STACK Virtual
-#define HEAP_SIZE 5*1024
+/// TickTimer Defines
+#define configCPU_CLOCK_HZ          (INT32U)25165824    ///< CPU clock in Hertz
+#define configTICK_RATE_HZ          (INT32U)1000        ///< Tick timer rate in Hertz
+#define configTIMER_PRE_SCALER      0                   ///< Informs if there is a timer prescaler
+#define TickCountOverFlow           (INT16U)32000       ///< Determines the tick timer overflow
+#define configRTC_CRISTAL_HZ        (INT32U)1000
+#define configRTC_PRE_SCALER        10
+
+
+/// Stack Defines
+/// Coldfire with 8KB of RAM: 40 * 128 bytes = 5KB of Virtual Stack
+#define HEAP_SIZE 48*128
 
 
 // Others Defines
@@ -59,7 +65,7 @@ O arquivo *BRTOS.h* apresentará a seguinte estrutura:
 
   * *DEBUG* é utilizado em algumas plataformas que possuem diferenciações entre o simulador e o debugger. Desta forma o código se adapta a condição desejada. *DEBUG = 1* indica modo debugger / flash write.
 
-  * *COP (Computer Operating Properly)* indica se o _watchdog_ do sistema estará ativo. *COP = 1* indica _watchdog_ ativo.
+  * *WATCHDOG (Computer Operating Properly)* indica se o _watchdog_ do sistema estará ativo. *COP = 1* indica _watchdog_ ativo.
 
   * *SP`_`SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Para _Stack Pointer_ menor ou igual a 16 bits, utilize *SP`_`SIZE = 16*. Para _Stack Pointer_ menor ou igual a 32 bits, utilize *SP`_`SIZE = 32*.
 
