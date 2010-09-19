@@ -3,7 +3,9 @@
 
 = Introdução =
 
-Add your content here.
+Este artigo faz parte da documentação oficial do BRTOS e explicará configurações básicas do BRTOS e apresentará dicas de como portá-lo para outras arquiteturas.
+
+As dicas / configurações serão organizadas pelos arquivos do BRTOS.
 
 
 = Details =
