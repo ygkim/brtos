@@ -193,7 +193,7 @@ inline asm __declspec(register_abi) void RestoreContext(void)
 }}}
 
 *Outras definições do hardware:*
-
+Ex: Coldfire V1
 {{{
 /// Defines the change context command of the choosen processor
 #define ChangeContext(void) asm ("TRAP %14");
@@ -216,6 +216,20 @@ inline asm __declspec(register_abi) void RestoreContext(void)
 #define NUMBER_MIN_OF_STACKED_BYTES 68
 }}}
 
+Ex: HCS08
+{{{
+#define ChangeContext() asm ("SWI");
+#define OSEnterCritical asm ("SEI");
+#define OSExitCritical asm ("CLI");
+/// Defines the tick timer interrupt handler code (clear flag) of the choosen microcontroller
+#define TICKTIMER_INT_HANDLER TPM1SC_TOF = 0
+#define TIMER_MODULE TPM1MOD
+#define TIMER_COUNTER TPM1CNT
+
+//Stack Defines
+#define NUMBER_MIN_OF_STACKED_BYTES 6
+}}}
+
   * *ChangeContext(void)* Define o código em assembly para chamada de interrupção de software utilizada pela troca de contexto.
 
   * *OSEnterCritical* Define a função que coloca o código do BRTOS em região crítica, ou seja, desabilita as interrupções.
@@ -235,6 +249,8 @@ inline asm __declspec(register_abi) void RestoreContext(void)
 == 1.4 HAL.c ==
 
 O arquivo *HAL.c* contêm as funções da camada de abstração de hardware do sistema.
+
+A função _TickTimerSetup_ deve ser utilizada para implementar a rotina de configuração do Tick Timer do sistema. Valores típicos entre 1ms e 10ms.
 
 {{{
 ////////////////////////////////////////////////////////////
@@ -262,3 +278,5 @@ void TickTimerSetup(void)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 }}}
+
+A função _TickTimerSetup_ deve ser utilizada para implementar a rotina de configuração do Tick Timer do sistema. Valores típicos entre 1ms e 10ms.
