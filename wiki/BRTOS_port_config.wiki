@@ -364,6 +364,35 @@ Note que o microcontrolador HCS08 utiliza uma arquitetura CISC com poucos regist
 Já o Coldfire V1, possui muitos 7 registradores de endereço e 7 registradores de dados. Ainda, é necessário definir a condição inicial do registrador de condição e do vetor de controle do sistema. Não conseguimos impedir que o compilador da Freescale salvasse uma parcela do contexto automaticamente. Desta forma, as interrupções salvam automaticamente os registradores D0,D1,D2,A0 e A1. A função para salvar o contexto do BRTOS salva o resto. Isto pode ser notado na ordem de entrada dos registradores na instalação da tarefa.
 
 <BR>
+*Nota:* A tarefa 1 é utilizada para gerenciar o *WATCHDOG* e o relógio do sistema. Esta tarefa é chamada a cada 10 ticks do sistema (10ms nos códigos exemplo). O *WATCHDOG* esta configurado para 32ms no exemplo. Se o sistema deixar de entrar nesta tarefa é porque está inconsistente e será resetado pelo *WATCHDOG*.
+
+{{{
+void Task_1(void)
+{
+   // task setup
+   INT16U i = 0;
+   INT8U  j = 0;
+   OSResetTime(&Hora);
+  
+   // task main loop
+   for (;;)
+   {
+      #if (WATCHDOG == 1)
+        __RESET_WATCHDOG();
+      #endif
+      
+      DelayTask(10);
+      i++;
+      if (i >= 100)
+      {
+        OSUpdateUptime(&Hora,&Data);
+        i = 0;
+      }
+   }
+}
+}}}
+
+<BR>
 Era isso pessoal ... As informações necessárias para configurar e portar o BRTOS estão neste documento. Estamos a disposição para qualquer dúvida.
 
 *OBS: O port do sistema com suporte a interrupções aninhadas exige um pouco mais de esforço. Em um próximo post iremos abordar as modificações necessárias.*
