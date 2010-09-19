@@ -107,13 +107,9 @@ O arquivo *HAL.h* contêm as definições da camada de abstração de hardware d
 }}}
 
 *Salvar e restaurar contexto. Salvar stack pointer.*
-{{{
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-/////      Port Defines                                /////
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
 
+*Coldfire V1:*
+{{{
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 /////      Save Context Define                         /////
@@ -139,9 +135,6 @@ inline asm __declspec(register_abi) void SaveContext(void)
 ////////////////////////////////////////////////////////////
 
 
-
-
-
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 /////      Save Stack Pointer Define                   /////
@@ -161,9 +154,6 @@ inline asm __declspec(register_abi) void SaveCurrentSP(void)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
-
-
 
 
 ////////////////////////////////////////////////////////////
@@ -191,6 +181,25 @@ inline asm __declspec(register_abi) void RestoreContext(void)
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 }}}
+
+*HCS08:*
+{{{
+#define SaveCurrentSP() \
+{                       \
+  asm("TSX");           \
+  asm("STHX SPvalue");  \
+}
+
+
+
+#define OS_RESTORE_CONTEXT() \
+{                            \
+  asm("LDHX SPvalue");       \
+  asm("TXS");                \
+}
+}}}
+
+*OBS: O único contexto a ser salvo no HCS08 é o registrador H. Como o compilador utilizado inclui automaticamente o código para salvar este registrador nas interrupções, o port não precisa implementar o salvamento de contexto.*
 
 *Outras definições do hardware:*
 Ex: Coldfire V1
@@ -279,21 +288,18 @@ void TickTimerSetup(void)
 ////////////////////////////////////////////////////////////
 }}}
 
-A função _TickTimerSetup_ deve ser utilizada para implementar a rotina de configuração do Tick Timer do sistema. Valores típicos entre 1ms e 10ms.
+A função *TickTimerSetup* deve ser utilizada para implementar a rotina de configuração do Tick Timer do sistema. Valores típicos entre 1ms e 10ms.
 
 
-As funções InstallTask e InstallIdle são praticamente independentes do microcontrolador. O que faz com que estejam incluídas no HAL é a preparação do stack para o boot inicial da tarefa.
+As funções *InstallTask* e *InstallIdle* são praticamente independentes do microcontrolador. O que faz com que estejam incluídas no HAL é a preparação do stack para o boot inicial da tarefa.
 
 O protótipo destas função é apresentado abaixo:
 {{{
 INT8U InstallTask(void(*FctPtr)(void),const char *TaskName, INT16U USER_STACKED_BYTES,INT8U iPriority)
-}}}
 
-<BR>
-{{{
 INT8U InstallIdle(void(*FctPtr)(void), INT16U USER_STACKED_BYTES)
 }}}
-{{{
+
 
 
 Para exemplificar a diferença de um port destas funções será apresentado o trecho de instalação que precisa ser portado para o HCS08 e para o Coldfire V1.
