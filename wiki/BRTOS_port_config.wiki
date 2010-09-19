@@ -5,6 +5,9 @@
 
 Este artigo faz parte da documentação oficial do BRTOS e explicará configurações básicas do BRTOS e apresentará dicas de como portá-lo para outras arquiteturas.
 
+Note que em alguns pontos será diferenciado a versão 1.1 do BRTOS. O escalonador do sistema foi modificado nesta versão. Estas modificações reduziram a latência das interrupções e aceleraram o escalonador. Em um conjunto de tarefas teste, a ocupação de CPU baixou de 2,65% para 1,29%.
+
+
 As dicas / configurações serão organizadas pelos arquivos do BRTOS.
 
 <BR>
