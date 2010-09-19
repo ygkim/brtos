@@ -49,8 +49,6 @@ O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a mem
 #define configTICK_RATE_HZ          (INT32U)1000        ///< Tick timer rate in Hertz
 #define configTIMER_PRE_SCALER      0                   ///< Informs if there is a timer prescaler
 #define TickCountOverFlow           (INT16U)32000       ///< Determines the tick timer overflow
-#define configRTC_CRISTAL_HZ        (INT32U)1000
-#define configRTC_PRE_SCALER        10
 
 
 /// Stack Defines
@@ -63,13 +61,17 @@ O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a mem
 #define configMAX_TASK_INSTALL 32
 }}}
 
-  * *DEBUG* é utilizado em algumas plataformas que possuem diferenciações entre o simulador e o debugger. Desta forma o código se adapta a condição desejada. *DEBUG = 1* indica modo debugger / flash write.
+  * *DEBUG* é utilizado em algumas plataformas que possuem diferenciações entre o simulador e o debugger. Desta forma o código se adapta a condição desejada. *DEBUG = 1* indica modo debugger / gravação do código no microcontrolador.
 
-  * *WATCHDOG (Computer Operating Properly)* indica se o _watchdog_ do sistema estará ativo. *COP = 1* indica _watchdog_ ativo.
+  * *WATCHDOG* indica se o _watchdog_ do sistema estará ativo. *WATCHDOG = 1* indica _watchdog_ ativo.
 
-  * *SP`_`SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Para _Stack Pointer_ menor ou igual a 16 bits, utilize *SP`_`SIZE = 16*. Para _Stack Pointer_ menor ou igual a 32 bits, utilize *SP`_`SIZE = 32*.
+  * *NUMBER`_`OF`_`PRIORITIES* só é válido para a versão 1.1 do BRTOS, que mudou seu escalonador. É utilizado para informar ao sistema a quantidade de prioridades disponíveis. Os valores válidos são 16 ou 32. Recomenda-se utilizar no máximo 16 prioridades para microcontroladores de 8 bits e 32 prioridades para microcontroladores de 16 e 32 bits.
+
+  * *SP`_`SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Os valores válidos para _Stack Pointer_ são 16 e 32. Por exemplo, o microcontrolador HCS08 utiliza *SP`_`SIZE = 16*. Já o microcontrolador Coldfire V1 utiliza *SP`_`SIZE = 32*.
 
   * *NUMBER`_`OF`_`TASKS* indica quantas tarefas podem ser instaladas em uma aplicação. O valor máximo para este _define_ é 31. Esta definição permite que uma menor quantidade de memória seja alocada para estrutura de contexto de tarefas. Utilize este recurso para reduzir o consumo de memória do sistema quando um número pequeno de tarefas for instalado.
+
+  * *TIMER`_`HOOK`_`EN* habilita ou desabilita uma função ancora no Tick do sistema. Esta função pode ser utilizada para implementar trechos curtos de código que dependam de um temporizador. Como estes trechos de código são curtos, não justificam a utilização de uma tarefa. CUIDADO: Se o sistema não estiver permitindo a utilização de aninhamento de interrupções, esta função estará em região com interrupções bloqueadas.
 
   * *configCPU`_`CLOCK`_`HZ* indica a freqüência de barramento utilizada pelo microcontrolador em hertz.
 
@@ -83,6 +85,9 @@ O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a mem
 
   * *configMAX`_`TASK`_`NAME`_`LEN* configura o tamanho máximo em caracteres para o nome da tarefa. Por padrão do sistema, a associação de nomes às tarefas é desativada, devido ao consumo excessivo de memória.
 
-  * *configMAX`_`TASK`_`INSTALL* determina o número máximo de tarefas que o escalonador do sistema pode gerenciar. O valor máximo deste _define_ é 32. Este valor indica ainda a posição de instalação da tarefa de espera (_Idle Task_). Quando se utiliza poucas tarefas, recomenda-se diminuir o valor deste _define_. Por exemplo, em uma aplicação com 6 tarefas, reduzir este valor p/ 7 limita a associação de prioridades disponíveis para as tarefas. Neste caso, as prioridades disponíveis seriam de 0 a 6, onde a prioridade 6 é ocupada pela _Idle Task_.
-*OBS:* Quanto menor o valor de prioridade associado a uma tarefa, maior sua prioridade no sistema.
-s
+  * *configMAX`_`TASK`_`INSTALL* 
+*Versão inferiores a 1.1* - determina o número máximo de tarefas que o escalonador do sistema pode gerenciar. O valor máximo deste _define_ é 32. Este valor indica ainda a posição de instalação da tarefa de espera (_Idle Task_). Quando se utiliza poucas tarefas, recomenda-se diminuir o valor deste _define_. Por exemplo, em uma aplicação com 6 tarefas, reduzir este valor p/ 7 limita a associação de prioridades disponíveis para as tarefas. Neste caso, as prioridades disponíveis seriam de 0 a 6, onde a prioridade 6 é ocupada pela _Idle Task_.
+*OBS: Quanto menor o valor de prioridade associado a uma tarefa, maior sua prioridade no sistema.*
+
+*Versão 1.1* - determina o número máximo de tarefas que o escalonador do sistema pode gerenciar. O valor deste _define_ é configurado automaticamente a partir da definição do número de prioridades disponíveis. As prioridades disponíveis vão de 0 a 15 ou de 0 a 31. A prioridade 0 é ocupada pela _Idle Task_.
+*OBS: Quanto maior o valor de prioridade associado a uma tarefa, maior sua prioridade no sistema.*
