@@ -7,7 +7,7 @@ Este artigo faz parte da documentação oficial do BRTOS e explicará configura�
 
 As dicas / configurações serão organizadas pelos arquivos do BRTOS.
 
-
+<BR>
 == 1.1 hardware.h ==
 
 O arquivo *hardware.h* contêm os includes de arquivos da arquitetura / MCU utilizado. Estes includes normalmente informam o endereço dos registradores do MCU, os códigos para habilitar / desabilitar interrupções, modos de baixo consumo, entre outros.
@@ -19,6 +19,7 @@ Exemplo de hardware.h do Coldfire V1 e HCS08:
 }}}
 
 
+<BR>
 == 1.2 BRTOS.h ==
 
 O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a memória, clock e muitas outras configurações. Este arquivo apresentará a seguinte estrutura:
@@ -93,6 +94,7 @@ O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a mem
 *OBS: Quanto maior o valor de prioridade associado a uma tarefa, maior sua prioridade no sistema.*
 
 
+<BR>
 == 1.3 HAL.h ==
 
 O arquivo *HAL.h* contêm as definições da camada de abstração de hardware do sistema e a definição do microcontrolador utilizado.
@@ -229,7 +231,8 @@ inline asm __declspec(register_abi) void RestoreContext(void)
   * *NUMBER_MIN_OF_STACKED_BYTES* Define o número de bytes ocupado para guardar um contexto do sistema.
 
 
-== 1.4 HAL.x ==
+<BR>
+== 1.4 HAL.c ==
 
 O arquivo *HAL.c* contêm as funções da camada de abstração de hardware do sistema.
 
