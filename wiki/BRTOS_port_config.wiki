@@ -214,3 +214,48 @@ inline asm __declspec(register_abi) void RestoreContext(void)
 #define NUMBER_MIN_OF_STACKED_BYTES 68
 }}}
 
+  * *ChangeContext(void)* Define o código em assembly para chamada de interrupção de software utilizada pela troca de contexto.
+
+  * *OSEnterCritical* Define a função que coloca o código do BRTOS em região crítica, ou seja, desabilita as interrupções.
+
+  * *OSExitCritical* Define a função que retira o código do BRTOS da região crítica, ou seja, habilita as interrupções.
+
+  * *OS_Wait* Define a rotina de código que coloca o microcontrolador em modo de baixo consumo na Idle Task.
+
+  * *TICKTIMER_INT_HANDLER* Define a rotina de código que limpa a flag da interrupção utilizada para gerar o Tick timer do sistema.
+
+  * *TIMER_MODULE* Define o registrador de módulo do temporizador utilizado pelo Tick Timer do sistema. Esta informação é utilizada para o cálculo do tempo de ocupação da CPU.
+
+  * *NUMBER_MIN_OF_STACKED_BYTES* Define o número de bytes ocupado para guardar um contexto do sistema.
+
+
+== 1.4 HAL.x ==
+
+O arquivo *HAL.c* contêm as funções da camada de abstração de hardware do sistema.
+
+{{{
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+/////      OS Tick Timer Setup                         /////
+/////                                                  /////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+void TickTimerSetup(void)
+{
+  
+  /* ### Init_TPM init code */
+  /* TPM1SC: TOF=0,TOIE=0,CPWMS=0,CLKSB=0,CLKSA=0,PS2=0,PS1=0,PS0=0 */
+  TPM1SC = 0x00;                       /* Stop and reset counter */
+  TPM1MOD = (configCPU_CLOCK_HZ / configTICK_RATE_HZ) >> configTIMER_PRE_SCALER; /* Period value setting */
+  (void)(TPM1SC == 0);                 /* Overflow int. flag clearing (first part) */
+  /* TPM1SC: TOF=0,TOIE=1,CPWMS=0,CLKSB=0,CLKSA=1,PS2=0,PS1=0,PS0=0 */
+  TPM1SC = 0x48 | configTIMER_PRE_SCALER;                       /* Int. flag clearing (2nd part) and timer control register setting */
+  
+  /* ### */
+}
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+}}}
