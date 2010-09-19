@@ -1,16 +1,82 @@
 #summary Dicas de como configurar o BRTOS e como portá-lo.
 #labels Phase-Deploy
 
-= Introdução =
+= 1. Dicas de configuração / port do BRTOS =
 
 Este artigo faz parte da documentação oficial do BRTOS e explicará configurações básicas do BRTOS e apresentará dicas de como portá-lo para outras arquiteturas.
 
 As dicas / configurações serão organizadas pelos arquivos do BRTOS.
 
 
-= Details =
+== 1.1 hardware.h ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+O arquivo hardware.h contém os includes de arquivos da arquitetura / MCU utilizado. Estes includes normalmente informam o endereço dos registradores do MCU, os códigos para habilitar / desabilitar interrupções, modos de baixo consumo, entre outros.
+
+Exemplo de hardware.h do Coldfire V1 e HCS08:
+{{{
+#include <hidef.h>               /* for EnableInterrupts macro */
+#include "derivative.h"          /* include peripheral declarations */
+}}}
+
+Antes de iniciar o desenvolvimento da aplicação é preciso configurar alguns parâmetros do sistema. Estas configurações devem ser realizadas nos arquivos *BRTOS.h* e *event.h*.
+
+  * O arquivo BRTOS.h possui definições relativas a memória, clock e o microcontrolador utilizado;
+  * Já o arquivo event.h define quais eventos / serviços do sistema serão utilizados (semáforos, mutex, mailbox e filas de mensagem).
+
+O arquivo *BRTOS.h* apresentará a seguinte estrutura:
+
+{{{
+// Define if simulation or DEBUG
+#define DEBUG 1
+
+// Define if whatchdog active
+#define COP 1
+
+// Define CPU Stack Pointer Size
+#define SP_SIZE 32
+
+// Define the number of Task to be Installed
+// must always be equal or higher to NumberOfInstalledTasks
+#define NUMBER_OF_TASKS 6
+
+
+// TickTimer Defines
+#define configCPU_CLOCK_HZ          (INT32U)24008000
+#define configTICK_RATE_HZ          (INT32U)1000
+#define configTIMER_PRE_SCALER      0
+#define TickCountOverFlow           (INT16U)32000
+
+
+//Stack Defines
+// P/ Coldfire com 8KB de RAM, limite de 5KB p/ STACK Virtual
+#define HEAP_SIZE 5*1024
+
+
+// Others Defines
+#define configMAX_TASK_NAME_LEN 16
+#define configMAX_TASK_INSTALL 32
+}}}
+
+  * *DEBUG* é utilizado em algumas plataformas que possuem diferenciações entre o simulador e o debugger. Desta forma o código se adapta a condição desejada. *DEBUG = 1* indica modo debugger / flash write.
+
+  * *COP (Computer Operating Properly)* indica se o _watchdog_ do sistema estará ativo. *COP = 1* indica _watchdog_ ativo.
+
+  * *SP`_`SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Para _Stack Pointer_ menor ou igual a 16 bits, utilize *SP`_`SIZE = 16*. Para _Stack Pointer_ menor ou igual a 32 bits, utilize *SP`_`SIZE = 32*.
+
+  * *NUMBER`_`OF`_`TASKS* indica quantas tarefas podem ser instaladas em uma aplicação. O valor máximo para este _define_ é 31. Esta definição permite que uma menor quantidade de memória seja alocada para estrutura de contexto de tarefas. Utilize este recurso para reduzir o consumo de memória do sistema quando um número pequeno de tarefas for instalado.
+
+  * *configCPU`_`CLOCK`_`HZ* indica a freqüência de barramento utilizada pelo microcontrolador em hertz.
+
+  * *configTICK`_`RATE`_`HZ* define o _Timer Tick_ (marca de tempo) do sistema, ou seja, a resolução do gerenciador de tempo do RTOS. Valores entre 1ms (1000 Hz) e 10ms (100 Hz) são recomendados. Nunca esqueça que a resolução do gerenciamento de tempo é de + ou - 1 _Timer Tick_.
+
+  * *configTIMER`_`PRE`_`SCALER* pode ser utilizado no _port_ do sistema para a configuração do hardware responsável pelo _Timer Tick_.
+
+  * *TickCountOverFlow* determina o número máximo de marcas de tempo do sistema que podem ser utilizadas pelo gerenciador de tempo. Imagine o caso onde se utiliza um _Timer Tick_ de 1ms. Para gerar um _delay_ maior do que 32000ms pode ser necessário utilizar duas chamadas da função *DelayTask* ou utilizar a função *DelayTaskHMSM* que opera em milisegundos, segundos, minutos e horas.
+
+  * *HEAP`_`SIZE* determina a quantidade de memória alocada como pilha virtual das tarefas. Sempre que uma tarefa é instalada, a quantidade de memória utilizada pela tarefa será alocada no _HEAP_.
+
+  * *configMAX`_`TASK`_`NAME`_`LEN* configura o tamanho máximo em caracteres para o nome da tarefa. Por padrão do sistema, a associação de nomes às tarefas é desativada, devido ao consumo excessivo de memória.
+
+  * *configMAX`_`TASK`_`INSTALL* determina o número máximo de tarefas que o escalonador do sistema pode gerenciar. O valor máximo deste _define_ é 32. Este valor indica ainda a posição de instalação da tarefa de espera (_Idle Task_). Quando se utiliza poucas tarefas, recomenda-se diminuir o valor deste _define_. Por exemplo, em uma aplicação com 6 tarefas, reduzir este valor p/ 7 limita a associação de prioridades disponíveis para as tarefas. Neste caso, as prioridades disponíveis seriam de 0 a 6, onde a prioridade 6 é ocupada pela _Idle Task_.
+*OBS:* Quanto menor o valor de prioridade associado a uma tarefa, maior sua prioridade no sistema.
+s
