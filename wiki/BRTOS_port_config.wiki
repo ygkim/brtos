@@ -7,6 +7,43 @@ Este artigo faz parte da documentação oficial do BRTOS e explicará configura�
 
 Note que em alguns pontos será diferenciado a versão 1.1 do BRTOS. O escalonador do sistema foi modificado nesta versão. Estas modificações reduziram a latência das interrupções e aceleraram o escalonador. Em um conjunto de tarefas teste, a ocupação de CPU baixou de 2,65% para 1,29%.
 
+*Importante*:
+Ao usar interrupções é importante que o código de usuário seja executado através de uma chamada de função, para evitar que o compilador desalinhe a pilha.
+
+{{{
+
+void Toggle(void){
+  PTAD_PTAD1 = ~PTAD_PTAD1;
+  PTAD_PTAD2 = ~PTAD_PTAD2;
+}
+
+
+#pragma TRAP_PROC
+void FastTick(void)
+{
+  // ************************
+  // Entrada de interrupção
+  // ************************
+
+  OS_INT_ENTER();
+  
+  // Tratamento da interrupção 
+  TIMER_HANDLER = 0;
+    
+  OS_ENABLE_NESTING();
+ 
+/* aqui vai a chamada de função do código de usuário declarada acima */ 
+  Toggle();
+
+  // ************************
+  // Saída de interrupção
+  // ************************
+  OS_INT_EXIT();
+  // ************************
+}
+}}}
+
+
 
 As dicas / configurações serão organizadas pelos arquivos do BRTOS.
 
