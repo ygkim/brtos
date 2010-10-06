@@ -24,8 +24,8 @@ O BRTOS foi desenvolvido com o intuito de ser um sistema operacional simples, co
 O tempo de troca de contexto depende do clock e do microcontrolador utilizado.
 Resultados obtidos até o momento:
 
-Coldfire V1 - Troca de contexto em 10us com clock de barramento = 24Mhz.<BR>
-HCS08       - Troca de contexto em 30us com clock de barramento = 20Mhz.
+Coldfire V1 - Troca de contexto em 4us com clock de barramento = 24Mhz.<BR>
+HCS08       - Troca de contexto em 5us com clock de barramento = 20Mhz.
 
 
 <BR>
