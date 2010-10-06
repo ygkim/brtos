@@ -24,22 +24,23 @@ void FastTick(void)
   // ************************
   // Entrada de interrupção
   // ************************
-
   OS_INT_ENTER();
-  
+
   // Tratamento da interrupção 
-  TIMER_HANDLER = 0;
+  TIMER_HANDLER;
     
+  // ***************************************
+  // Habilita aninhamento de interrupções
+  // ***************************************
   OS_ENABLE_NESTING();
  
-/* aqui vai a chamada de função do código de usuário declarada acima */ 
+  // aqui vai a chamada de função do código de usuário declarada acima
   Toggle();
 
   // ************************
   // Saída de interrupção
   // ************************
   OS_INT_EXIT();
-  // ************************
 }
 }}}
 
@@ -150,10 +151,16 @@ O arquivo *HAL.h* contêm as definições da camada de abstração de hardware d
 
 *Definição do microcontrolador:*
 {{{
+/// Define if nesting interrupt is active or not
+#define NESTING_INT 0
+
 // Define if Coldfire
 #define Coldfire 1              ///< Enables or disables the coldfire core as the default processor
 #define HCS08 0                 ///< Enables or disables the HCS08 core as the default processor
 }}}
+
+  * *NESTING`_`INT* habilita ou desabilita o aninhamento de interrupções no sistema.
+
 
 *Salvar e restaurar contexto. Salvar stack pointer.*
 
