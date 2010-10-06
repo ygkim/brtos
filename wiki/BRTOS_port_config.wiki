@@ -5,7 +5,7 @@
 
 Este artigo faz parte da documentação oficial do BRTOS e explicará configurações básicas do BRTOS e apresentará dicas de como portá-lo para outras arquiteturas.
 
-Note que em alguns pontos será diferenciado a versão 1.1 do BRTOS. O escalonador do sistema foi modificado nesta versão. Estas modificações reduziram a latência das interrupções e aceleraram o escalonador. Em um conjunto de tarefas teste, a ocupação de CPU baixou de 2,65% para 1,29%.
+Note que em alguns pontos será diferenciado a versão 1.1 (e superiores) do BRTOS. O escalonador do sistema foi modificado nesta versão. Estas modificações reduziram a latência das interrupções e aceleraram o escalonador. Em um conjunto de tarefas teste, a ocupação de CPU baixou de 2,65% para 1,29%.
 
 *Importante*:
 Ao usar interrupções é importante que o código de usuário seja executado através de uma chamada de função, para evitar que o compilador desalinhe a pilha.
@@ -81,6 +81,13 @@ O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a mem
 // must always be equal or higher to NumberOfInstalledTasks
 #define NUMBER_OF_TASKS 6
 
+// Define if OS Trace is active
+#define OSTRACE 1
+
+#if (OSTRACE == 1)  
+  #include "debug_stack.h"
+#endif
+
 /// Define if TimerHook function is active
 #define TIMER_HOOK_EN 1
 
@@ -111,6 +118,8 @@ O arquivo *BRTOS.h* contêm parâmetros do sistema, definições relativas a mem
   * *SP`_`SIZE* é utilizado para informar ao compilador o tamanho do registrador _stack pointer_ do processador em bits. Os valores válidos para _Stack Pointer_ são 16 e 32. Por exemplo, o microcontrolador HCS08 utiliza *SP`_`SIZE = 16*. Já o microcontrolador Coldfire V1 utiliza *SP`_`SIZE = 32*.
 
   * *NUMBER`_`OF`_`TASKS* indica quantas tarefas podem ser instaladas em uma aplicação. O valor máximo para este _define_ é 31. Esta definição permite que uma menor quantidade de memória seja alocada para estrutura de contexto de tarefas. Utilize este recurso para reduzir o consumo de memória do sistema quando um número pequeno de tarefas for instalado.
+
+  * *OS`_`TRACE* habilita ou desabilita o _trace_ do sistema. Com este recurso habilitado é possível monitorar o comportamento das tarefas, interrupções e chamadas de sistema. Desta forma torna-se possível identificar comportamentos errôneos, chamadas indevidas, entre outros problemas que possam vir a ocorrer em uma determinada aplicação.
 
   * *TIMER`_`HOOK`_`EN* habilita ou desabilita uma função ancora no Tick do sistema. Esta função pode ser utilizada para implementar trechos curtos de código que dependam de um temporizador. Como estes trechos de código são curtos, não justificam a utilização de uma tarefa. CUIDADO: Se o sistema não estiver permitindo a utilização de aninhamento de interrupções, esta função estará em região com interrupções bloqueadas.
 
