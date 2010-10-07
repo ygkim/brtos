@@ -96,7 +96,7 @@ O arquivo *BRTOS.h* apresentará a seguinte estrutura:
   * *configMAX`_`TASK`_`NAME`_`LEN* configura o tamanho máximo em caracteres para o nome da tarefa. Por padrão do sistema, a associação de nomes às tarefas é desativada, devido ao consumo excessivo de memória.
 
   * *configMAX`_`TASK`_`INSTALL* determina o número máximo de tarefas que o escalonador do sistema pode gerenciar. O valor máximo deste _define_ é 32. Este valor indica ainda a posição de instalação da tarefa de espera (_Idle Task_). Quando se utiliza poucas tarefas, recomenda-se diminuir o valor deste _define_. Por exemplo, em uma aplicação com 6 tarefas, reduzir este valor p/ 7 limita a associação de prioridades disponíveis para as tarefas. Neste caso, as prioridades disponíveis seriam de 0 a 6, onde a prioridade 6 é ocupada pela _Idle Task_.
-*OBS:* Quanto menor o valor de prioridade associado a uma tarefa, maior sua prioridade no sistema.
+*OBS:* A partir da versão 1.1 do BRTOS quanto maior o valor de prioridade associado a uma tarefa, maior sua prioridade no sistema.
 
 No arquivo *event.h* o desenvolvedor determinará quais serviços / eventos estarão disponíveis para a aplicação. Ainda, irá determinar a quantidade de instâncias possíveis para um determinado serviço, apresentando a seguinte estrutura:
 
